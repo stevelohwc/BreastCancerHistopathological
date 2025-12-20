@@ -4,6 +4,18 @@
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Dataset](https://img.shields.io/badge/Dataset-BreakHis-orange.svg)](https://www.kaggle.com/datasets/ambarish/breakhis)
 
+
+
+<div align="center">
+
+<img src="media/01.png" width="300">
+<img src="media/02.png" width="300">
+<img src="media/03.png" width="300">
+ 
+ 
+</div>
+<br/>
+
 A comprehensive machine learning pipeline for automated classification of breast cancer histopathology images using traditional ML algorithms with advanced feature extraction and selection techniques.
 
 ---
