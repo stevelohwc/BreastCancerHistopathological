@@ -671,7 +671,7 @@ fprintf(' 11. Combined ROC Curves\n');
 fprintf(' 12. Confusion Breakdown\n');
 fprintf(' 13. Confusion Matrices (All Models)\n');
 fprintf('\n═════════════════════════════════════════════════════════════\n');
-fprintf('  8-STEP PATTERN RECOGNITION PIPELINE COMPLETED\n');
+fprintf('  STEP PATTERN RECOGNITION PIPELINE COMPLETED\n');
 fprintf('═════════════════════════════════════════════════════════════\n');
 
 diary off;
