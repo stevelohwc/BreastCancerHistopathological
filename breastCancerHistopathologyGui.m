@@ -610,7 +610,7 @@ function breastCancerHistopathologyGui(modelMatPath)
                     end
                 end
 
-                app.ui.lblOverall.Text = "Overall best (test Sens): " + algName + " (" + sprintf('%.1f%%', bestSens * 100) + ")";
+                app.ui.lblOverall.Text = "Overall best (test Sensitivity): " + algName + " (" + sprintf('%.1f%%', bestSens * 100) + ")";
                 app.ui.lblOverall.Tooltip = 'Loaded test metrics from results.mat.';
                 app.ui.lblOverall.FontColor = [0.25 0.25 0.25];
             else
@@ -1230,17 +1230,20 @@ end
 function feat = extractFeaturesFromImage(I, cfg)
     Iproc = advancedPreprocessing(I, cfg);
     mask = basicSegmentationMask(Iproc);
-    feat = [];
-    feat = [feat, extractHOGFeatures(Iproc, 'CellSize', cfg.hogCellSize)];
-    feat = [feat, glcmFeatures(Iproc)];
-    feat = [feat, lbpFeaturesCompact(Iproc)];
-    feat = [feat, gaborFeatures(Iproc, cfg.gaborWavelengths, cfg.gaborOrientations)];
-    feat = [feat, edgeStats(Iproc)];
-    feat = [feat, cornerStats(Iproc)];
-    feat = [feat, intensityMoments(Iproc)];
-    feat = [feat, morphFeatures(mask)];
-    feat = [feat, colorHSVStats(I)];
-    feat = [feat, shapeFeatures(mask)];
+    % Collect feature blocks in a cell array to avoid repeated reallocations.
+    featParts = cell(1, 10);
+    idx = 1;
+    featParts{idx} = extractHOGFeatures(Iproc, 'CellSize', cfg.hogCellSize); idx = idx + 1;
+    featParts{idx} = glcmFeatures(Iproc); idx = idx + 1;
+    featParts{idx} = lbpFeaturesCompact(Iproc); idx = idx + 1;
+    featParts{idx} = gaborFeatures(Iproc, cfg.gaborWavelengths, cfg.gaborOrientations); idx = idx + 1;
+    featParts{idx} = edgeStats(Iproc); idx = idx + 1;
+    featParts{idx} = cornerStats(Iproc); idx = idx + 1;
+    featParts{idx} = intensityMoments(Iproc); idx = idx + 1;
+    featParts{idx} = morphFeatures(mask); idx = idx + 1;
+    featParts{idx} = colorHSVStats(I); idx = idx + 1;
+    featParts{idx} = shapeFeatures(mask);
+    feat = [featParts{:}];
     feat(~isfinite(feat)) = 0;
     feat = double(feat(:)');
 end
@@ -1322,14 +1325,20 @@ function f = gaborFeatures(I, wavelengths, orientations)
     gm = imgaborfilt(I, g);
     vals = [];
     if isnumeric(gm)
-        for k = 1:size(gm, 3)
+        nFilters = size(gm, 3);
+        vals = zeros(1, 2 * nFilters);
+        for k = 1:nFilters
             M = abs(gm(:, :, k));
-            vals = [vals, mean(M(:)), std(M(:))];
+            idx = 2 * (k - 1) + 1;
+            vals(idx:idx+1) = [mean(M(:)), std(M(:))];
         end
     elseif iscell(gm)
-        for k = 1:numel(gm)
+        nFilters = numel(gm);
+        vals = zeros(1, 2 * nFilters);
+        for k = 1:nFilters
             M = abs(gm{k});
-            vals = [vals, mean(M(:)), std(M(:))];
+            idx = 2 * (k - 1) + 1;
+            vals(idx:idx+1) = [mean(M(:)), std(M(:))];
         end
     else
         vals = [0 0];
