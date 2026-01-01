@@ -68,7 +68,7 @@ function breastCancerHistopathologyGui(modelMatPath)
         testingTabRoot = uigridlayout(app.ui.tabTesting, [2 1]);
         testingTabRoot.ColumnWidth = {'1x'};
         testingTabRoot.RowHeight = {'1x', 180};
-        testingTabRoot.Padding = [0 0 0 0];
+        testingTabRoot.Padding = [8 8 8 8];
 
         testingRoot = uigridlayout(testingTabRoot, [1 2]);
         testingRoot.ColumnWidth = {360, '1x'};
@@ -197,7 +197,7 @@ function breastCancerHistopathologyGui(modelMatPath)
         resultsRoot = uigridlayout(app.ui.tabResults, [3 1]);
         resultsRoot.RowHeight = {'fit', '3x', '1.6x'};
         resultsRoot.ColumnWidth = {'1x'};
-        resultsRoot.Padding = [8 8 8 8];
+        resultsRoot.Padding = [4 8 8 8];
 
         resultsPanel = uipanel(resultsRoot, 'Title', 'Results File');
         resultsPanel.Layout.Row = 1;
