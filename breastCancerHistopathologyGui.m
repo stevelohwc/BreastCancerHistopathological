@@ -35,6 +35,7 @@ function breastCancerHistopathologyGui(modelMatPath)
     buildUi();
     refreshModelSetUi();
     refreshResultsTab();
+    refreshGraphTab();
     try
         loadDefaultModels(modelMatPath);
     catch me
@@ -62,6 +63,7 @@ function breastCancerHistopathologyGui(modelMatPath)
 
         app.ui.tabTesting = uitab(app.ui.tabGroup, 'Title', 'Models');
         app.ui.tabResults = uitab(app.ui.tabGroup, 'Title', 'Results');
+        app.ui.tabGraph = uitab(app.ui.tabGroup, 'Title', 'Graph');
 
         testingTabRoot = uigridlayout(app.ui.tabTesting, [2 1]);
         testingTabRoot.ColumnWidth = {'1x'};
@@ -347,6 +349,20 @@ function breastCancerHistopathologyGui(modelMatPath)
             'ColumnName', {}, 'RowName', {});
         app.ui.tblTiming.Layout.Row = 1;
         app.ui.tblTiming.Layout.Column = 1;
+
+        % Graph tab
+        graphRoot = uigridlayout(app.ui.tabGraph, [1 1]);
+        graphRoot.RowHeight = {'1x'};
+        graphRoot.ColumnWidth = {'1x'};
+        graphRoot.Padding = [8 8 8 8];
+
+        app.ui.graphPanel = uipanel(graphRoot, 'Title', 'Training_results Images');
+        app.ui.graphPanel.Layout.Row = 1;
+        app.ui.graphPanel.Layout.Column = 1;
+        try
+            app.ui.graphPanel.Scrollable = 'on';
+        catch
+        end
 
         % Log (Models tab only)
         logPanel = uipanel(testingTabRoot, 'Title', 'Log');
@@ -907,6 +923,109 @@ function breastCancerHistopathologyGui(modelMatPath)
             app.ui.resultsDropdown.Value = idx;
         end
         app.uiUpdating = wasUpdating;
+    end
+
+    %% ======================== GRAPH TAB ========================
+    function refreshGraphTab()
+        if ~isfield(app, 'ui') || ~isfield(app.ui, 'graphPanel') || isempty(app.ui.graphPanel)
+            return;
+        end
+
+        delete(app.ui.graphPanel.Children);
+        try
+            app.ui.graphPanel.Scrollable = 'on';
+        catch
+        end
+
+        imagePaths = listGraphImages();
+        if isempty(imagePaths)
+            uilabel(app.ui.graphPanel, 'Text', 'No images found in Training_results.', ...
+                'HorizontalAlignment', 'center');
+            return;
+        end
+
+        drawnow;
+        n = numel(imagePaths);
+        cols = 2;
+        rows = ceil(n / cols);
+        tileHeight = 260;
+        rowSpacing = 10;
+        colSpacing = 10;
+        padLeft = 8;
+        padRight = 8;
+        padTop = 8;
+        padBottom = 8;
+
+        panelPos = app.ui.graphPanel.Position;
+        panelWidth = panelPos(3);
+        panelHeight = panelPos(4);
+        try
+            inner = app.ui.graphPanel.InnerPosition;
+            panelWidth = inner(3);
+            panelHeight = inner(4);
+        catch
+        end
+        panelWidth = max(panelWidth, 1);
+        panelHeight = max(panelHeight, 1);
+
+        tileWidth = (panelWidth - padLeft - padRight - (cols - 1) * colSpacing) / cols;
+        tileWidth = max(tileWidth, 1);
+
+        contentHeight = rows * tileHeight + (rows - 1) * rowSpacing + padTop + padBottom;
+        contentHeight = max(contentHeight, panelHeight);
+
+        contentPanel = uipanel(app.ui.graphPanel, 'BorderType', 'none');
+        contentPanel.Units = 'pixels';
+        contentPanel.Position = [0 0 panelWidth contentHeight];
+
+        for i = 1:n
+            row = ceil(i / cols);
+            col = mod(i - 1, cols) + 1;
+            imgPath = char(imagePaths(i));
+            [~, base, ext] = fileparts(imgPath);
+
+            x = padLeft + (col - 1) * (tileWidth + colSpacing);
+            y = contentHeight - padTop - row * tileHeight - (row - 1) * rowSpacing;
+            tile = uipanel(contentPanel, 'Title', char(string(base) + string(ext)));
+            tile.Units = 'pixels';
+            tile.Position = [x y tileWidth tileHeight];
+
+            ax = uiaxes(tile);
+            ax.Units = 'normalized';
+            ax.Position = [0.02 0.05 0.96 0.9];
+            ax.XTick = [];
+            ax.YTick = [];
+
+            try
+                I = imread(imgPath);
+                imshow(I, 'Parent', ax);
+            catch
+                title(ax, 'Load error');
+            end
+        end
+    end
+
+    function imagePaths = listGraphImages()
+        imagePaths = strings(0, 1);
+        folder = fullfile(pwd, 'Training_results');
+        if ~isfolder(folder)
+            return;
+        end
+        patterns = {'*.png', '*.jpg', '*.jpeg', '*.tif', '*.tiff', '*.bmp'};
+        files = strings(0, 1);
+        for i = 1:numel(patterns)
+            d = dir(fullfile(folder, patterns{i}));
+            if isempty(d)
+                continue;
+            end
+            names = sort(string({d.name}));
+            files = [files; names(:)]; %#ok<AGROW>
+        end
+        if isempty(files)
+            return;
+        end
+        files = unique(files, 'stable');
+        imagePaths = fullfile(folder, files);
     end
 
     function syncResultsTabFromModel()
