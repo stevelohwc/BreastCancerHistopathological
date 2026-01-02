@@ -57,8 +57,55 @@ This project implements an **8-step pattern recognition pipeline** for binary cl
 
 ---
 
-## ✨ Features
+## 📁 Project Structure
 
+ProjectRoot/
+│
+├─ BreastCancerHistopathological.m % Main training & analysis pipeline
+├─ breastCancerHistopathologyGui.m % GUI for inference & visualization
+│
+├─ Training_Results/ % Auto-generated outputs
+│ ├─ models.mat % Trained ML models
+│ ├─ results.mat % Evaluation results & metrics
+│ └─ training_log.txt % Detailed execution log
+│
+├─ archive.zip % (Optional) BreakHis dataset archive
+│
+
+---
+
+
+## 🖥️ System Requirements
+
+### Software
+- MATLAB **R2021b or newer** (recommended)
+- Required Toolboxes:
+  - Image Processing Toolbox
+  - computer vision toolbox
+  - Statistics and Machine Learning Toolbox
+  - Pattern recognition toolbox
+
+---
+
+### Hardware
+- CPU-based execution (GPU not required)
+- Minimum **8 GB RAM** recommended
+- Approximately **1–2 GB disk space** for dataset and intermediate files
+
+---
+
+## ✨ Features
+### 🧠 Key Features
+
+- Automated dataset bootstrap and preparation (BreakHis dataset, 100× magnification)
+- Robust multi-stage image preprocessing
+- Multi-modal feature extraction
+- Multiple feature selection techniques
+- Comparative machine learning classifiers
+- Comprehensive performance evaluation
+- Automatic GUI launch in **full-screen (maximized) mode**
+- Clean, reproducible execution with detailed logging
+- 
 ### 🔬 **Medical Image Processing**
 - **10-stage preprocessing pipeline**:
   - Grayscale conversion, resizing, noise reduction
@@ -257,22 +304,23 @@ This project implements an **8-step pattern recognition pipeline** for binary cl
    - Download from [Kaggle](https://www.kaggle.com/datasets/ambarish/breakhis)
    - Extract to `BreakHis_Main/` folder in project root
 
-3. **Verify folder structure**
+3. **Project Structure**
    ```
-   breast-cancer-classification/
-   ├── BreastCancer_Enhanced_Complete.m
-   ├── BreakHis_Main/
-   │   ├── benign/
-   │   │   ├── adenosis/
-   │   │   ├── fibroadenoma/
-   │   │   ├── phyllodes_tumor/
-   │   │   └── tubular_adenoma/
-   │   └── malignant/
-   │       ├── ductal_carcinoma/
-   │       ├── lobular_carcinoma/
-   │       ├── mucinous_carcinoma/
-   │       └── papillary_carcinoma/
-   └── README.md
+ProjectRoot/
+│
+├─ BreastCancerHistopathological.m        % Main training & analysis pipeline
+├─ breastCancerHistopathologyGui.m        % GUI for inference & visualization
+│
+├─ Training_Results/                      % Auto-generated outputs
+│   ├─ models.mat                         % Trained ML models
+│   ├─ results.mat                        % Evaluation results & metrics
+│   └─ training_log.txt                   % Detailed execution log
+│
+├─ archive.zip                            % (Optional) BreakHis dataset archive
+│
+└─ README.md                              % Project documentation
+                       % Project documentation
+
    ```
 
 ---
