@@ -1,79 +1,97 @@
 # 🔬 Breast Cancer Histopathology Classification System
 
-[![MATLAB](https://img.shields.io/badge/MATLAB-R2020b+-blue.svg)](https://www.mathworks.com/products/matlab.html)
+[![MATLAB](https://img.shields.io/badge/MATLAB-R2021b+-blue.svg)](https://www.mathworks.com/products/matlab.html)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Dataset](https://img.shields.io/badge/Dataset-BreakHis-orange.svg)](https://www.kaggle.com/datasets/ambarish/breakhis)
 
- 
-
 <div align="center">
-
 <img src="media/Header.png" width="826" height="413">
- 
- 
- 
 </div>
 <br/>
 
-A comprehensive machine learning pipeline for automated classification of breast cancer histopathology images using traditional ML algorithms with advanced feature extraction and selection techniques.
+A comprehensive **classical machine learning pipeline** for automated breast cancer histopathology image classification using traditional ML algorithms with advanced feature extraction and selection techniques.
 
 ---
 
 ## 📋 Table of Contents
 
-- [Overview](#overview)
-- [Features](#features)
-- [Dataset](#dataset)
-- [System Architecture](#system-architecture)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Results](#results)
-- [Methodology](#methodology)
-- [File Structure](#file-structure)
-- [Citation](#citation)
-- [License](#license)
+- [Overview](#-overview)
+- [Key Features](#-key-features)
+- [Quick Start](#-quick-start)
+- [System Requirements](#-system-requirements)
+- [Workflow](#-workflow)
+- [System Architecture](#-system-architecture)
+- [Feature Engineering](#-feature-engineering)
+- [Dataset](#-dataset)
+- [GUI Application](#-gui-application)
+- [File Structure](#-file-structure)
+- [Dataset Bootstrap Examples](#-dataset-bootstrap-examples)
+- [Results & Performance](#-results--performance)
+- [Visualization Gallery](#-visualization-gallery)
+- [License](#-license)
+- [Author](#-author)
+- [Acknowledgments](#-acknowledgments)
+- [Project Status](#-project-status)
+- [Contributing](#-contributing)
 
 ---
 
 ## 🎯 Overview
 
-This project implements an **8-step pattern recognition pipeline** for binary classification of breast histopathology images (benign vs. malignant) using the **BreakHis dataset**. The system emphasizes:
+This project implements an **end-to-end 8-step pattern recognition pipeline** for binary classification of breast histopathology images (benign vs. malignant) using the **BreakHis dataset (100X magnification)**. 
 
-- **Clinical accuracy**: Minimizing false negatives (missed cancer diagnoses)
-- **Comprehensive feature extraction**: Multi-modal approach (texture, morphology, intensity)
-- **Multiple feature selection methods**: 6 different algorithms for robust feature ranking
-- **Rigorous validation**: k-fold cross-validation with statistical significance testing
-- **Complete visualization**: 13 diagnostic figures for performance analysis
-
-### 🏆 Performance Highlights
+### Performance Summary
 
 | Model | Accuracy | Sensitivity | Specificity | AUC |
 |-------|----------|-------------|-------------|-----|
-| **Random Forest** | 71.1% | 61.9% | 80.4% | 0.771 |
-| **XGBoost** | 68.6% | 60.8% | 76.3% | 0.754 |
-| **SVM** | 62.9% | 59.8% | 66.0% | 0.667 |
+| **Random Forest** | **70.1%** | 58.8% | 81.4% | 0.770 |
+| **XGBoost** | 69.6% | 60.8% | 78.4% | 0.779 |
+| **SVM (RBF+LDA)** | 64.4% | 62.9% | 66.0% | 0.661 |
 
-*Note: Performance on BreakHis 100X magnification with 85/15 train/test split*
-
----
-
-## 📁 Project Structure
-
-ProjectRoot/
-│
-├─ BreastCancerHistopathological.m % Main training & analysis pipeline
-├─ breastCancerHistopathologyGui.m % GUI for inference & visualization
-│
-├─ Training_Results/ % Auto-generated outputs
-│ ├─ models.mat % Trained ML models
-│ ├─ results.mat % Evaluation results & metrics
-│ └─ training_log.txt % Detailed execution log
-│
-├─ archive.zip % (Optional) BreakHis dataset archive
-│
+*Patient-disjoint split: 85% train (1,078 images: Benign=531, Malignant=547) / 15% test (194 images: Benign=97, Malignant=97)*
 
 ---
 
+## 🧠 Key Features
+
+- **Fully automated workflow**: Dataset download → Training → GUI launch
+- **Traditional ML focus**: SVM, Random Forest, XGBoost (no deep learning)
+- **Advanced feature engineering**: 2767 features → 6 selection methods → optimal K=400
+- **Comprehensive evaluation**: Cross-validation + statistical tests + 13 diagnostic figures
+- **GUI for inference**: Automatic launch after training completion
+- **Automated dataset bootstrap**: Fallback mirrors for automatic download
+- **Robust preprocessing**: 10-stage pipeline with CLAHE, multi-scale filtering
+- **Patient-disjoint split**: Zero data leakage with verified patient separation
+- **Clean, reproducible execution**: Detailed logging and result storage
+
+---
+
+## ⚡ Quick Start
+
+### Installation & Execution
+
+**Option 1: Automatic Dataset Download (Recommended)**
+
+```matlab
+% 1. Clone/download this repository
+% 2. Place both .m files in the same folder
+% 3. Run in MATLAB:
+BreastCancerHistopathological
+```
+
+The script will:
+- ✅ Automatically download `archive.zip` from fallback mirrors
+- ✅ Extract BreakHis dataset
+- ✅ Train models and generate results
+- ✅ Launch GUI automatically when complete
+
+**Option 2: Manual Dataset Placement**
+
+1. Download `archive.zip` from [Kaggle BreakHis](https://www.kaggle.com/datasets/ambarish/breakhis)
+2. Place `archive.zip` next to `BreastCancerHistopathological.m`
+3. Run: `BreastCancerHistopathological`
+
+---
 
 ## 🖥️ System Requirements
 
@@ -81,141 +99,71 @@ ProjectRoot/
 - MATLAB **R2021b or newer** (recommended)
 - Required Toolboxes:
   - Image Processing Toolbox
-  - computer vision toolbox
+  - Computer Vision Toolbox
   - Statistics and Machine Learning Toolbox
-  - Pattern recognition toolbox
-
----
+  - Pattern Recognition Toolbox
 
 ### Hardware
 - CPU-based execution (GPU not required)
 - Minimum **8 GB RAM** recommended
-- Approximately **1–2 GB disk space** for dataset and intermediate files
+- Approximately **4 GB disk space** for dataset and intermediate files
+
+### Operating System
+- Windows (fully tested)
+- Linux / macOS (expected to work with minor path adjustments)
 
 ---
 
-## ✨ Features
-### 🧠 Key Features
+## 🔄 Workflow
 
-- Automated dataset bootstrap and preparation (BreakHis dataset, 100× magnification)
-- Robust multi-stage image preprocessing
-- Multi-modal feature extraction
-- Multiple feature selection techniques
-- Comparative machine learning classifiers
-- Comprehensive performance evaluation
-- Automatic GUI launch in **full-screen (maximized) mode**
-- Clean, reproducible execution with detailed logging
-- 
-### 🔬 **Medical Image Processing**
-- **10-stage preprocessing pipeline**:
-  - Grayscale conversion, resizing, noise reduction
-  - CLAHE (Contrast Limited Adaptive Histogram Equalization)
-  - Multi-scale Gaussian filtering, unsharp masking
-  - Morphological operations, bilateral filtering
-  - Intensity normalization
+### Automated Execution Steps
 
-### 🧬 **Multi-Modal Feature Extraction (2767 features)**
-
-#### **1. Texture Features**
-- **HOG (Histogram of Oriented Gradients)**: Edge directionality (16×16 cells)
-- **LBP (Local Binary Patterns)**: Micro-texture descriptors (32×32 cells)
-- **GLCM (Gray-Level Co-occurrence Matrix)**: Spatial texture (8 offsets)
-- **Gabor Filter Bank**: Multi-scale, multi-orientation (3 wavelengths × 4 orientations)
-
-#### **2. Morphological Features**
-- Edge statistics (Sobel, Canny, LoG)
-- Harris corner detection
-- Skeleton length, Euler number
-- Shape descriptors (area, perimeter, solidity, eccentricity, extent)
-
-#### **3. Intensity Features**
-- Statistical moments (mean, variance, skewness, kurtosis)
-- Percentiles (10th, 50th, 90th)
-- HSV color statistics (H&E staining variations)
-
-### 🎯 **Feature Selection Methods (6 Algorithms)**
-
-| Method | Type | Characteristics | Time Complexity |
-|--------|------|-----------------|-----------------|
-| **ReliefF** | Filter | Distance-weighted, k-NN based | O(n²d) |
-| **F-Score (ANOVA)** | Filter | Univariate statistical testing | O(nd) |
-| **RFE** | Wrapper | Recursive elimination with SVM | O(d² × iterations) |
-| **Tree-based** | Embedded | Random Forest impurity | O(n log n × trees) |
-| **LASSO** | Embedded | L1 regularization (sparsity) | O(nd² × iterations) |
-| **PCA** | Transform | Linear dimensionality reduction | O(d³) |
-
-### 🤖 **Machine Learning Models**
-
-#### **1. Support Vector Machine (SVM)**
-- Kernel: Radial Basis Function (RBF)
-- Hyperparameters: BoxConstraint [1, 10, 100], KernelScale [0.5, 1, 5]
-- Preprocessing: LDA projection (Mahalanobis-like distance)
-
-#### **2. Random Forest (Ensemble)**
-- Trees: 100-200, MinLeafSize: 1-5
-- Out-of-bag error estimation
-- Feature importance ranking
-
-#### **3. XGBoost (Gradient Boosting)**
-- Method: LogitBoost (MATLAB implementation)
-- Cycles: 100-200, LearnRate: 0.1-0.2
-- Adaptive learning with boosting
-
-### 📊 **Validation & Evaluation**
-
-- **5-fold stratified cross-validation** for hyperparameter tuning
-- **Patient-disjoint split** (no patient overlap between train/test)
-- **McNemar's test** for statistical significance between models
-- **Bootstrap confidence intervals** (95% CI, n=100)
-- **Comprehensive metrics**: Accuracy, Sensitivity, Specificity, Precision, F1, AUC
-
-### 📈 **Visualization Suite (13 Figures)**
-
-1. 10-Stage Preprocessing Pipeline
-2. LDA 1D Projection (class separation)
-3. ReliefF Feature Importance (top 30)
-4. Feature Selection Algorithm Comparison
-5. PCA Scree Plot & Cumulative Variance
-6. Hyperparameter Tuning Curves (K vs CV accuracy)
-7. SVM Performance (ROC + Confusion Matrix + Metrics)
-8. Random Forest Performance
-9. XGBoost Performance
-10. Metrics Comparison (all models)
-11. Combined ROC Curves
-12. Confusion Breakdown (TN/FP/FN/TP)
-13. Confusion Matrices (side-by-side)
-
----
-
-## 📂 Dataset
-
-### BreakHis (Breast Cancer Histopathological Database)
-
-- **Source**: [Kaggle - BreakHis](https://www.kaggle.com/datasets/ambarish/breakhis)
-- **Original Paper**: Spanhol et al. (2016) - IEEE TBME
-- **Images**: 7,909 microscopic images (700 patients)
-- **Magnifications**: 40X, 100X, 200X, 400X
-- **Staining**: Hematoxylin & Eosin (H&E)
-
-#### **Classes**
-
-**Benign (2,480 images):**
-- Adenosis
-- Fibroadenoma
-- Phyllodes tumor
-- Tubular adenoma
-
-**Malignant (5,429 images):**
-- Ductal carcinoma
-- Lobular carcinoma
-- Mucinous carcinoma
-- Papillary carcinoma
-
-#### **Dataset Characteristics**
-- RGB color images (PNG format)
-- Resolution: Variable (typically 460×700 pixels)
-- Tissue samples: Formalin-fixed, paraffin-embedded (FFPE)
-- Ground truth: Expert pathologist diagnosis (double-verified)
+```
+┌─────────────────────────────────────┐
+│ 1. Dataset Bootstrap                │
+│    ├─ Check for archive.zip         │
+│    ├─ Download from mirrors         │
+│    ├─ Extract to BreakHis_Main/     │
+│    └─ Resolve benign/malignant dirs │
+└─────────────────────────────────────┘
+                  ↓
+┌─────────────────────────────────────┐
+│ 2. Dataset Preparation              │
+│    ├─ Patient-disjoint split        │
+│    ├─ Balanced sampling             │
+│    ├─ Train: 85% / Test: 15%       │
+│    └─ Verify no data leakage        │
+└─────────────────────────────────────┘
+                  ↓
+┌─────────────────────────────────────┐
+│ 3. Feature Engineering              │
+│    ├─ 10-stage preprocessing        │
+│    ├─ Extract 2767 features         │
+│    ├─ Feature selection (6 methods) │
+│    └─ Dimensionality reduction      │
+└─────────────────────────────────────┘
+                  ↓
+┌─────────────────────────────────────┐
+│ 4. Model Training & Evaluation      │
+│    ├─ 3-fold cross-validation       │
+│    ├─ Hyperparameter grid search    │
+│    ├─ Train: SVM, RF, XGBoost       │
+│    └─ Test on held-out set          │
+└─────────────────────────────────────┘
+                  ↓
+┌─────────────────────────────────────┐
+│ 5. Output Generation                │
+│    ├─ Save models.mat                │
+│    ├─ Save results.mat               │
+│    ├─ Generate 13 figures            │
+│    └─ Write training_log.txt         │
+└─────────────────────────────────────┘
+                  ↓
+┌─────────────────────────────────────┐
+│ 6. GUI Launch (Automatic)           │
+│    └─ breastCancerHistopathologyGui │
+└─────────────────────────────────────┘
+```
 
 ---
 
@@ -252,9 +200,9 @@ ProjectRoot/
                             ↓
 ┌─────────────────────────────────────────────────────────────┐
 │ STEP 5: FEATURE SELECTION (6 methods)                       │
-│ - Variance/Correlation filtering → ~150 features           │
+│ - Variance/Correlation filtering → 2084 features           │
 │ - ReliefF, F-Score, RFE, Tree, LASSO, PCA ranking          │
-│ - Grid search: K ∈ {100, 150, 200, 250}                    │
+│ - Grid search: K ∈ {150, 300, 400}                         │
 └─────────────────────────────────────────────────────────────┘
                             ↓
 ┌─────────────────────────────────────────────────────────────┐
@@ -266,7 +214,7 @@ ProjectRoot/
                             ↓
 ┌─────────────────────────────────────────────────────────────┐
 │ STEP 7: TRAINING & HYPERPARAMETER TUNING                    │
-│ - 5-fold stratified cross-validation                       │
+│ - 3-fold stratified cross-validation                       │
 │ - Grid search over hyperparameter space                    │
 │ - Final training on full training set                      │
 └─────────────────────────────────────────────────────────────┘
@@ -276,194 +224,139 @@ ProjectRoot/
 │ - Confusion matrix analysis (TN/FP/FN/TP)                  │
 │ - Metrics: Acc, Sens, Spec, Prec, F1, AUC                  │
 │ - Statistical tests: McNemar, Bootstrap CI                  │
-│ - Performance comparison with benchmarks                    │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 🚀 Installation
+## 🔬 Feature Engineering
 
-### Prerequisites
+### 1. Medical Image Preprocessing (10 Stages)
 
-- MATLAB R2020b or later
-- Required Toolboxes:
-  - Image Processing Toolbox
-  - Statistics and Machine Learning Toolbox
-  - Computer Vision Toolbox
+1. RGB to Grayscale conversion
+2. Resize to 128×128 pixels
+3. Median filtering (noise reduction)
+4. Wiener filtering (adaptive denoising)
+5. **CLAHE** (Contrast Limited Adaptive Histogram Equalization)
+6. Multi-scale Gaussian filtering
+7. Unsharp masking (edge enhancement)
+8. Morphological operations (erosion/dilation)
+9. Bilateral filtering (edge-preserving smoothing)
+10. Intensity normalization
 
-### Setup
+### 2. Feature Extraction (2767 Features)
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/breast-cancer-classification.git
-   cd breast-cancer-classification
-   ```
+#### Texture Features
+- **HOG** (Histogram of Oriented Gradients): Edge directionality (16×16 cells)
+- **LBP** (Local Binary Patterns): Micro-texture descriptors (32×32 cells)
+- **GLCM** (Gray-Level Co-occurrence Matrix): Spatial texture relationships (8 offsets)
+- **Gabor Filter Bank**: Multi-scale, multi-orientation (3 wavelengths × 4 orientations)
 
-2. **Download BreakHis dataset**
-   - Download from [Kaggle](https://www.kaggle.com/datasets/ambarish/breakhis)
-   - Extract to `BreakHis_Main/` folder in project root
+#### Morphological Features
+- Edge statistics (Sobel, Canny, Laplacian of Gaussian)
+- Harris corner detection
+- Skeleton length & Euler number
+- Shape descriptors (area, perimeter, solidity, eccentricity, extent)
 
-3. **Project Structure**
-   ```
-ProjectRoot/
-│
-├─ BreastCancerHistopathological.m        % Main training & analysis pipeline
-├─ breastCancerHistopathologyGui.m        % GUI for inference & visualization
-│
-├─ Training_Results/                      % Auto-generated outputs
-│   ├─ models.mat                         % Trained ML models
-│   ├─ results.mat                        % Evaluation results & metrics
-│   └─ training_log.txt                   % Detailed execution log
-│
-├─ archive.zip                            % (Optional) BreakHis dataset archive
-│
-└─ README.md                              % Project documentation
-                       % Project documentation
+#### Intensity Features
+- Statistical moments (mean, variance, skewness, kurtosis)
+- Percentiles (10th, 50th, 90th)
+- HSV color statistics (captures H&E staining variations)
 
-   ```
+### 3. Feature Selection (6 Methods)
+
+| Method | Type | Characteristics | Execution Time |
+|--------|------|-----------------|----------------|
+| **ReliefF** | Filter | Distance-weighted, k-NN based | ~30.0s |
+| **F-Score** | Filter | Univariate ANOVA | ~0.04s |
+| **RFE** | Wrapper | Recursive SVM elimination | ~12.2s |
+| **Tree-based** | Embedded | Random Forest impurity | ~19.3s |
+| **LASSO** | Embedded | L1 regularization | ~6.4s |
+| **PCA** | Transform | Linear dimensionality reduction | ~0.9s |
+
+**Feature Selection Pipeline:**
+```
+2767 features → Variance filter (0.001) → 2089 features
+              → Correlation filter (0.95) → 2084 features
+              → ReliefF ranking → K candidates {150, 300, 400}
+              → Grid search CV → Best K=400 (CV Acc=91.7%)
+```
+
+### 4. Classification Models
+
+#### **Support Vector Machine (SVM)**
+- Kernel: Radial Basis Function (RBF)
+- Preprocessing: LDA projection (Mahalanobis-like distance)
+- Hyperparameters: BoxConstraint [10, 100, 1000], KernelScale [0.5, 1, 5]
+
+#### **Random Forest (Ensemble)**
+- Trees: 100-200
+- MinLeafSize: 1, 3, 5
+- Out-of-bag error estimation
+- Feature importance ranking
+
+#### **XGBoost (Gradient Boosting)**
+- Method: LogitBoost (MATLAB implementation)
+- Cycles: 100-200
+- LearnRate: 0.1, 0.2
+- Adaptive boosting with weak learners
 
 ---
 
-## 💻 Usage
+## 📂 Dataset
 
-### Basic Usage
+### BreakHis (Breast Cancer Histopathological Database)
 
-```matlab
-% Run the complete pipeline
-BreastCancer_Enhanced_Complete()
+- **Source**: [Kaggle - BreakHis](https://www.kaggle.com/datasets/ambarish/breakhis)
+- **Paper**: Spanhol et al. (2016), *IEEE Trans. on Biomedical Engineering*
+- **Images**: 7,909 microscopic images from 700 patients
+- **Magnifications**: 40X, 100X, 200X, 400X (this project uses **100X**)
+- **Staining**: Hematoxylin & Eosin (H&E)
+
+#### Classes
+
+**Benign (2,480 images):**
+- Adenosis, Fibroadenoma, Phyllodes tumor, Tubular adenoma
+
+**Malignant (5,429 images):**
+- Ductal carcinoma, Lobular carcinoma, Mucinous carcinoma, Papillary carcinoma
+
+#### Dataset Preparation
+
+The script automatically creates a **patient-disjoint balanced split**:
+
+```
+BreakHis/
+├── Training/        (85% of minimum class size)
+│   ├── benign/      (531 images)
+│   └── malignant/   (547 images)
+└── Test/            (15% of minimum class size)
+    ├── benign/      (97 images)
+    └── malignant/   (97 images)
 ```
 
-### Output
-
-All results are saved to `Training_results/` folder:
-
-```
-Training_results/
-├── models.mat              % Trained models (for deployment)
-├── results.mat             % Complete results & analysis
-├── training_log.txt        % Execution log
-└── 01-13_*.png            % 13 visualization figures
-```
-
-### Loading Trained Models
-
-```matlab
-% Load models for prediction
-load('Training_results/models.mat', 'trained');
-
-% Access models
-svmModel = trained.models.SVM;
-rfModel = trained.models.RF;
-xgbModel = trained.models.XGB;
-
-% Access preprocessing parameters
-ldaPreprocessor = trained.branchA.ldaModel;
-zscoreParams = trained.branchB.zParams;
-selectedFeatures = trained.featureIndices;
-```
-
-### Customization
-
-Edit configuration in the code:
-
-```matlab
-% Dataset
-cfg.magnification = '100X';  % Options: '40X', '100X', '200X', '400X'
-cfg.prepTrainRatio = 0.85;   % Train/test split
-
-% Feature selection
-cfg.K_candidates = [100 150 200 250];
-cfg.varianceThreshold = 0.005;
-cfg.correlationThreshold = 0.90;
-
-% Cross-validation
-cfg.cvFolds = 5;
-
-% Model hyperparameters
-cfg.svm.boxConstraints = [1 10 100];
-cfg.rf.numTrees = [100 200];
-cfg.xgb.numCycles = [100 200];
-```
+**Key Feature**: Zero patient overlap between train and test sets (verified programmatically).
 
 ---
 
-## 📊 Results
+## 🖥️ GUI Application
 
-### Performance Metrics (100X Magnification)
+### Automatic Launch
 
-| Model | Accuracy | Sensitivity | Specificity | Precision | F1 | AUC | False Negatives |
-|-------|----------|-------------|-------------|-----------|----|----|-----------------|
-| **Random Forest** | **71.1%** | **61.9%** | 80.4% | 75.9% | 0.682 | **0.771** | **37 / 97** |
-| XGBoost | 68.6% | 60.8% | 76.3% | 72.0% | 0.659 | 0.754 | 38 / 97 |
-| SVM | 62.9% | 59.8% | 66.0% | 63.7% | 0.617 | 0.667 | 39 / 97 |
+After successful training, the GUI (`breastCancerHistopathologyGui.m`) launches automatically in **maximized full-screen mode**.
 
-### Confusion Matrix (Random Forest - Best Model)
+### GUI Features
 
+- Load trained models from `Training_Results/models.mat`
+- Upload new histopathology images for inference
+- View predictions with confidence scores
+- Visualize performance metrics and confusion matrices
+- Interactive exploration of results
+
+**Manual Launch:**
+```matlab
+breastCancerHistopathologyGui
 ```
-                Predicted
-                Benign  Malignant
-Actual  Benign    78       19       (Specificity: 80.4%)
-        Malignant 37       60       (Sensitivity: 61.9%)
-```
-
-**Clinical Interpretation:**
-- **True Positives (60)**: Correctly identified malignant cases
-- **False Negatives (37)**: Missed cancers ⚠️ CRITICAL
-- **False Positives (19)**: Unnecessary anxiety/procedures
-- **True Negatives (78)**: Correctly identified benign cases
-
-### Statistical Significance
-
-**McNemar's Test (p-values):**
-- SVM vs Random Forest: p = 0.0375* (significant)
-- SVM vs XGBoost: p = 0.1531 (not significant)
-- RF vs XGBoost: p = 0.4990 (not significant)
-
-**Bootstrap 95% Confidence Intervals:**
-- Random Forest: 70.7% [63.4%, 76.3%]
-- XGBoost: 68.5% [60.8%, 75.3%]
-- SVM: 63.1% [56.7%, 70.1%]
-
-### Comparison with State-of-the-Art
-
-| Method | Accuracy | Sensitivity | AUC | Year |
-|--------|----------|-------------|-----|------|
-| **Proposed (RF)** | **71.1%** | **61.9%** | **0.771** | 2024 |
-| Spanhol et al. | 84.6% | 82.0% | 0.850 | 2016 |
-| Gupta & Bhavsar | 88.0% | 86.5% | 0.890 | 2017 |
-| Araújo et al. | 83.4% | 81.0% | 0.840 | 2017 |
-
-*Note: Performance gap due to single magnification (100X) vs. multi-scale approaches in benchmarks*
-
----
-
-## 🔬 Methodology
-
-### Feature Selection Comparison
-
-| Algorithm | Computation Time | Top 20 Agreement | Advantages |
-|-----------|-----------------|------------------|------------|
-| ReliefF | 2.5s | Baseline | Distance-weighted, robust |
-| F-Score | 0.04s | 65% overlap | Fast, statistical |
-| RFE | 220s | 70% overlap | Iterative, accurate |
-| Tree-based | 6.3s | 60% overlap | Non-linear interactions |
-| LASSO | 0.2s | 75% overlap | Sparse solution |
-| PCA | 0.04s | N/A | Linear transform |
-
-### Hyperparameter Tuning Results
-
-**Grid Search Results (5-Fold CV):**
-
-| K Features | SVM CV Acc | RF CV Acc | XGB CV Acc |
-|------------|------------|-----------|------------|
-| 100 | 84.7% | 82.8% | **85.1%** |
-| 150 | **85.5%** | 82.8% | 83.9% |
-| 151 | **85.5%** | 82.7% | 84.3% |
-
-**Best Configuration:** K = 151 features, CV Accuracy = 85.5%
-
-**Note:** Gap between CV (85.5%) and test (71.1%) indicates overfitting - future work should address this.
 
 ---
 
@@ -472,202 +365,283 @@ Actual  Benign    78       19       (Specificity: 80.4%)
 ```
 breast-cancer-classification/
 │
-├── BreastCancer_Enhanced_Complete.m   # Main pipeline script
-├── README.md                           # This file
-├── LICENSE                             # MIT License
+├── BreastCancerHistopathological.m      # Main training pipeline
+├── breastCancerHistopathologyGui.m      # GUI for inference
+├── README.md                             # Documentation
+├── LICENSE                               # MIT License
 │
-├── BreakHis_Main/                     # Raw dataset (user downloads)
-│   ├── benign/
-│   └── malignant/
+├── archive.zip                          # (Optional) Downloaded automatically
 │
-├── BreakHis/                          # Prepared dataset (auto-generated)
+│
+├── BreakHis/                            # Prepared dataset (auto-generated)
 │   ├── Training/
-│   │   ├── benign/
-│   │   └── malignant/
+│   │   ├── benign/                      (531 images)
+│   │   └── malignant/                   (547 images)
 │   └── Test/
-│       ├── benign/
-│       └── malignant/
+│       ├── benign/                      (97 images)
+│       └── malignant/                   (97 images)
 │
-└── Training_results/                  # Output folder (auto-generated)
-    ├── models.mat                     # Trained models
-    ├── results.mat                    # Complete results
-    ├── training_log.txt               # Execution log
-    └── 01-13_*.png                   # Visualization figures
+├── Training_Results/                    # Output folder (auto-generated)
+│   ├── models.mat                       # Trained SVM, RF, XGBoost models
+│   ├── results.mat                      # Complete evaluation results
+│   ├── training_log.txt                 # Full execution log
+    └── 13 Visualization images
+        ├── Header.png
+        ├── 01_preprocessing_pipeline.png
+        ├── 02_lda_projection.png
+        ├── 04_feature_selection_comparison.png
+        ├── 05_pca_analysis.png
+        ├── 06_hyperparameter_tuning.png
+        ├── 07_svm_performance.png
+        ├── 08_rf_performance.png
+        ├── 09_xgb_performance.png
+        ├── 10_metrics_comparison.png
+        ├── 11_roc_curves.png
+        ├── 12_confusion_breakdown.png
+        └── 13_confusion_matrices.png                 
+
 ```
 
 ---
 
-## 🎓 Key Concepts
+## 🔄 Dataset Bootstrap Examples
 
-### Clinical Focus: Minimizing False Negatives
+### Scenario 1: Dataset Already Extracted
+```
+═══════════════════════════════════════════════════════════════
+  DATASET BOOTSTRAP (BreakHis)
+═══════════════════════════════════════════════════════════════
 
-In cancer diagnosis, **False Negatives are critical errors**:
-- Missed cancer → Delayed treatment → Poor prognosis
-- Target: **High Sensitivity** (>85% ideal)
-- Current: 61.9% sensitivity = 38% miss rate ⚠️
+[Bootstrap] [░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%  Checking for existing extracted dataset...
+[Bootstrap] [████████████████████████████] 100%  Dataset already present. Skipping download/extract.
 
-**Trade-off:**
-- Increasing sensitivity → More false positives → Unnecessary biopsies
-- Balance required: Maximize sensitivity while maintaining acceptable specificity
+[Bootstrap] [███████████████████████████░]  95%  Resolving dataset root (benign/malignant)...
+[Bootstrap] [████████████████████████████] 100%  Bootstrap complete.
 
-### Patient-Disjoint Split
-
-**Why it matters:**
-- **Problem**: Same patient's images in train & test → Data leakage
-- **Solution**: Split by patient ID, not random images
-- **Result**: Realistic performance estimation
-
-**Implementation:**
-```matlab
-% Extract patient IDs from filenames
-trainPatients = unique(extractPatientID(trainFiles));
-testPatients = unique(extractPatientID(testFiles));
-
-% Verify no overlap
-if ~isempty(intersect(trainPatients, testPatients))
-    error('Patient leakage detected!');
-end
+[Bootstrap] Using raw dataset root: D:\MATLAB\Code\Assignment\BreakHis_Main\...
 ```
 
-### Distance Metrics in Classification
+### Scenario 2: Automatic Download & Extraction
+```
+═══════════════════════════════════════════════════════════════
+  DATASET BOOTSTRAP (BreakHis)
+═══════════════════════════════════════════════════════════════
 
-| Model | Distance Metric | How it Works |
-|-------|----------------|--------------|
-| **SVM** | Mahalanobis-like (implicit) | RBF kernel + LDA preprocessing |
-| **Random Forest** | Not distance-based | Threshold-based splits on features |
-| **XGBoost** | Not distance-based | Gradient boosting with weak learners |
+[Bootstrap] [░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%  Checking for existing extracted dataset...
+[Bootstrap] [██████░░░░░░░░░░░░░░░░░░░░░░]  20%  archive.zip not found. Attempting fallback downloads...
 
----
+═══════════════════════════════════════════════════════════════
+  BREAKHIS DATASET ACQUISITION
+═══════════════════════════════════════════════════════════════
+This script will use local archive.zip if present. If not found, it will try
+to download archive.zip from fallback mirrors (A then B).
 
-## 🐛 Known Issues & Limitations
+Expected location for archive.zip (if you download it manually):
+  D:\MATLAB\Code\Assignment
 
-### Current Limitations
-
-1. **Performance below benchmarks** (71% vs 85%)
-   - **Cause**: Single magnification (100X) vs multi-scale in papers
-   - **Solution**: Combine multiple magnifications
-
-2. **High false negative rate** (38%)
-   - **Cause**: Small training set (1078 images)
-   - **Solution**: Data augmentation or deep learning
-
-3. **Overfitting** (CV 85.5% → Test 71%)
-   - **Cause**: Small test set (194 images), limited generalization
-   - **Solution**: More diverse training data
-
-4. **PCA yields only 1 component**
-   - **Cause**: Missing standardization before PCA
-   - **Status**: Fixed in latest version
-
-### Future Improvements
-
-- [ ] Multi-magnification ensemble (40X + 100X + 200X + 400X)
-- [ ] Deep learning models (CNN: ResNet, VGG, DenseNet)
-- [ ] Data augmentation (rotation, flip, color jitter)
-- [ ] Transfer learning from ImageNet pre-trained models
-- [ ] Attention mechanisms for interpretability
-- [ ] Deployment as web application or mobile app
+[Bootstrap] [████████░░░░░░░░░░░░░░░░░░░░]  30%  Trying fallback mirror A (direct zip)...
+[Bootstrap] [█████████████████░░░░░░░░░░░]  60%  archive.zip ready.
+[Bootstrap] [████████████████████░░░░░░░░]  70%  Preparing extraction folder...
+[Bootstrap] [██████████████████████░░░░░░]  80%  Extracting archive.zip to BreakHis_Main...
+[Bootstrap] [█████████████████████████░░░]  90%  Extraction complete.
+[Bootstrap] [███████████████████████████░]  95%  Resolving dataset root (benign/malignant)...
+[Bootstrap] [████████████████████████████] 100%  Bootstrap complete.
+```
 
 ---
 
-## 📚 References
+## 📊 Results & Performance
 
-### Dataset
+### Test Set Evaluation (194 images)
 
-1. **Spanhol, F. A., Oliveira, L. S., Petitjean, C., & Heutte, L. (2016)**  
-   "A Dataset for Breast Cancer Histopathological Image Classification"  
-   *IEEE Transactions on Biomedical Engineering*, 63(7), 1455-1462.  
-   [DOI: 10.1109/TBME.2015.2496264](https://doi.org/10.1109/TBME.2015.2496264)
+| Model | Accuracy | Sensitivity | Specificity | Precision | F1 | AUC |
+|-------|----------|-------------|-------------|-----------|----|----|
+| **Random Forest** | **0.701** | 0.588 | **0.814** | 0.760 | 0.663 | **0.770** |
+| **XGBoost** | 0.696 | 0.608 | 0.784 | 0.738 | 0.667 | **0.779** |
+| **SVM** | 0.644 | **0.629** | 0.660 | 0.649 | 0.639 | 0.661 |
 
-### Benchmarks
+**Confusion Matrices:**
+- SVM: TN=64, FP=33, FN=36, TP=61
+- Random Forest: TN=79, FP=18, FN=40, TP=57
+- XGBoost: TN=76, FP=21, FN=38, TP=59
 
-2. **Gupta, V., & Bhavsar, A. (2017)**  
-   "Breast Cancer Histopathological Image Classification: Is Magnification Important?"  
-   *IEEE Conference on Computer Vision and Pattern Recognition Workshops (CVPRW)*
+### Hyperparameter Tuning (3-Fold Cross-Validation)
 
-3. **Araújo, T., et al. (2017)**  
-   "Classification of Breast Cancer Histology Images Using Convolutional Neural Networks"  
-   *PLoS ONE*, 12(6), e0177544.
+| K Features | SVM CV Acc | RF CV Acc | XGB CV Acc |
+|------------|------------|-----------|------------|
+| 150 | 86.0% | 80.6% | 83.3% |
+| 300 | 89.0% | 81.5% | 84.0% |
+| **400** | **91.7%** | 81.3% | 84.0% |
 
-### Methods
+**Best Configuration:** K=400 features (selected by SVM CV accuracy)
 
-4. **Kononenko, I. (1994)**  
-   "Estimating Attributes: Analysis and Extensions of RELIEF"  
-   *European Conference on Machine Learning*
+### Execution Time
 
-5. **Tibshirani, R. (1996)**  
-   "Regression Shrinkage and Selection via the LASSO"  
-   *Journal of the Royal Statistical Society*, Series B, 58(1), 267-288.
+**Total Pipeline Duration:** 1,076.2s (~18 minutes)
+
+**Breakdown:**
+- Feature Extraction (Train): 147.2s
+- Feature Extraction (Test): 24.1s
+- Feature Selection: ReliefF (30.0s), RFE (12.2s), Tree (19.3s), LASSO (6.4s), PCA (0.9s)
+- Model Training: SVM (0.2s), RF (2.6s), XGB (13.3s)
 
 ---
 
-## 🤝 Contributing
+## 📈 Visualization Gallery
 
-Contributions are welcome! Please follow these steps:
+The pipeline generates 13 comprehensive diagnostic visualizations saved to `Training_Results/`:
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+<table>
+<tr>
+<td width="50%">
 
-### Areas for Contribution
+**01. Preprocessing Pipeline (10 Stages)**
+<img src="media/01_preprocessing_pipeline.png" width="100%">
 
-- Implementing deep learning models (CNN)
-- Adding more feature extraction methods
-- Improving preprocessing pipeline
-- Creating GUI for easy usage
-- Writing unit tests
-- Documentation improvements
+</td>
+<td width="50%">
+
+**02. LDA 1D Projection**
+<img src="media/02_lda_projection.png" width="100%">
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+**04. Feature Selection Algorithm Comparison**
+<img src="media/04_feature_selection_comparison.png" width="100%">
+
+</td>
+<td>
+
+**05. PCA Analysis**
+<img src="media/05_pca_analysis.png" width="100%">
+
+</td>
+</tr>
+
+<tr>
+<td colspan="2">
+
+**06. Hyperparameter Tuning Curves**
+<img src="media/06_hyperparameter_tuning.png" width="100%">
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+**07. SVM Performance**
+<img src="media/07_svm_performance.png" width="100%">
+
+</td>
+<td>
+
+**08. Random Forest Performance**
+<img src="media/08_rf_performance.png" width="100%">
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+**09. XGBoost Performance**
+<img src="media/09_xgb_performance.png" width="100%">
+
+</td>
+<td>
+
+**10. Metrics Comparison**
+<img src="media/10_metrics_comparison.png" width="100%">
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+**11. Combined ROC Curves**
+<img src="media/11_roc_curves.png" width="100%">
+
+</td>
+<td>
+
+**12. Confusion Breakdown (TN/FP/FN/TP)**
+<img src="media/12_confusion_breakdown.png" width="100%">
+
+</td>
+</tr>
+
+<tr>
+<td colspan="2">
+
+**13. Confusion Matrices (All Models)**
+<img src="media/13_confusion_matrices.png" width="100%">
+
+</td>
+</tr>
+</table>
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
-**BreakHis Dataset License:**
-The BreakHis dataset is publicly available for research purposes. Please cite the original paper (Spanhol et al., 2016) when using the dataset.
+**BreakHis Dataset License:**  
+Publicly available for research purposes. Please cite the original paper (Spanhol et al., 2016) when using the dataset.
 
 ---
 
 ## 👨‍💻 Author
 
-**Dr. Erna**  
-Expert in Machine Learning & Medical Image Processing
+**Mohamed Mohamed Said Aly and Wei Chun**  
+*Expert in Generative AI, NLP, Deep Learning and Machine Learning*
 
 ### Contact
-- Email: your.email@example.com
-- GitHub: [@yourusername](https://github.com/yourusername)
-- LinkedIn: [Your Name](https://linkedin.com/in/yourprofile)
+- GitHub: [@msaid1976](https://github.com/msaid1976) & [@stevelohwc](https://github.com/stevelohwc)   
+- LinkedIn: [Mohamed Said Aly](https://www.linkedin.com/in/mohamedsaidaly) & [Loh Wei Chun](https://www.linkedin.com/in/weichn)   
 
 ---
 
 ## 🙏 Acknowledgments
 
 - **BreakHis Dataset**: Spanhol et al. for providing the publicly available dataset
-- **MATLAB**: MathWorks for excellent image processing and ML toolboxes
-- **Medical Domain Experts**: For insights on clinical significance and validation
+- **MATLAB**: MathWorks for comprehensive image processing and ML toolboxes
+- **Medical Community**: Domain experts for guidance on clinical validation
 
 ---
 
 ## 📊 Project Status
 
-🟡 **Status**: Active Development  
-🎯 **Goal**: Achieve >85% accuracy & sensitivity  
-📅 **Last Updated**: December 2024  
-🔄 **Version**: 1.0.0
+🟢 **Status**: Complete & Functional  
+🎯 **Achievement**: End-to-end automated pipeline with GUI  
+📅 **Last Updated**: January 2025  
+🔄 **Version**: 1.0.0  
 
 ---
 
-## 🔗 Related Projects
+## 🤝 Contributing
 
-- [Deep Learning for Histopathology](https://github.com/user/deep-histo)
-- [Medical Image Segmentation](https://github.com/user/med-seg)
-- [Cancer Detection Toolkit](https://github.com/user/cancer-toolkit)
+Contributions welcome! Areas of interest:
+- Deep learning implementation (CNN architectures)
+- Multi-magnification fusion strategies
+- Advanced preprocessing techniques
+
+
+**To contribute:**
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/Enhancement`)
+3. Commit changes (`git commit -m 'Add Enhancement'`)
+4. Push to branch (`git push origin feature/Enhancement`)
+5. Open a Pull Request
 
 ---
 
 **⭐ If you find this project useful, please consider giving it a star!**
 
-**📧 Questions? Open an issue or contact the author.**
+**📧 Questions? Open an issue or reach out.**
