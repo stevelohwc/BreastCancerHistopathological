@@ -23,7 +23,7 @@ A comprehensive **classical machine learning pipeline** for automated breast can
 - [System Architecture](#-system-architecture)
 - [Feature Engineering](#-feature-engineering)
 - [Dataset](#-dataset)
-- [GUI Application](#-gui-application)
+- [GUI Application](#️-gui-application)
 - [File Structure](#-file-structure)
 - [Dataset Bootstrap Examples](#-dataset-bootstrap-examples)
 - [Results & Performance](#-results--performance)
@@ -341,17 +341,68 @@ BreakHis/
 
 ## 🖥️ GUI Application
 
+A MATLAB App Designer GUI is provided to support **interactive inference** (classifying a new histopathology image) and **experiment reporting** (viewing test metrics, ROC curves, and training artifacts).
+
 ### Automatic Launch
 
 After successful training, the GUI (`breastCancerHistopathologyGui.m`) launches automatically in **maximized full-screen mode**.
 
-### GUI Features
+### Tabs Overview
 
-- Load trained models from `Training_Results/models.mat`
-- Upload new histopathology images for inference
-- View predictions with confidence scores
-- Visualize performance metrics and confusion matrices
-- Interactive exploration of results
+- **Models**: Upload an image and run inference with **SVM**, **Random Forest**, and/or **XGBoost**. Results are shown as a probability bar chart and a per-model score table.
+- **Training Results**: Displays the saved evaluation dashboard from `results.mat` (metrics table, confusion matrices, and ROC curves with AUC).
+- **Training Graphs**: Gallery view of the generated analysis figures (preprocessing pipeline, LDA projection, feature importance, feature selection comparison, PCA analysis, hyperparameter tuning, etc.).
+- **Training logs**: Time-stamped logs for model loading, image inference, and comparison output (useful for traceability and debugging).
+
+### Inference Workflow (Models tab)
+
+1. Select a **Model set** (loaded from `Training_Results/models.mat`).
+2. Tick one or more algorithms (**SVM / Random Forest / XGBoost**).
+3. Click **Upload...** to choose an image.
+4. View:
+   - the uploaded image preview,
+   - **Algorithm Comparison** bar chart (Benign vs Malignant),
+   - per-algorithm results table (Label, Confidence, Benign, Malignant),
+   - and the execution log entries at the bottom.
+
+### Confidence Definition (Important)
+
+In this GUI, **confidence** is defined as the predicted class probability of the selected label (i.e., `max(P(benign), P(malignant))`).  
+The displayed **Benign** and **Malignant** values are **normalized** to sum to 1, enabling consistent comparison across algorithms.  
+The predicted label follows an **argmax** decision rule (the class with higher probability is selected).
+
+### Screenshots
+
+<table>
+<tr>
+<td width="50%">
+
+**Models Tab (Inference + Comparison)**  
+<img src="media/gui_models_tab.png" width="100%">
+
+</td>
+<td width="50%">
+
+**Training Results Dashboard**  
+<img src="media/gui_training_results.png" width="100%">
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+**Training Graphs Gallery**  
+<img src="media/gui_training_graphs.png" width="100%">
+
+</td>
+<td width="50%">
+
+**Training Logs Viewer**  
+<img src="media/gui_training_logs.png" width="100%">
+
+</td>
+</tr>
+</table>
 
 **Manual Launch:**
 ```matlab

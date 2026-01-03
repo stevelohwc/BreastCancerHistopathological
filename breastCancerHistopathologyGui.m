@@ -31,11 +31,13 @@ function breastCancerHistopathologyGui(modelMatPath)
     app.resultsPath = '';
     app.resultsFiles = strings(0, 1);
     app.resultsDisplayNames = strings(0, 1);
+    app.projectRoot = fileparts(mfilename('fullpath'));
 
     buildUi();
     refreshModelSetUi();
     refreshResultsTab();
     refreshGraphTab();
+    refreshTrainingLogTab();
     try
         loadDefaultModels(modelMatPath);
     catch me
@@ -62,8 +64,9 @@ function breastCancerHistopathologyGui(modelMatPath)
         app.ui.tabGroup.Layout.Column = 1;
 
         app.ui.tabTesting = uitab(app.ui.tabGroup, 'Title', 'Models');
-        app.ui.tabResults = uitab(app.ui.tabGroup, 'Title', 'Results');
-        app.ui.tabGraph = uitab(app.ui.tabGroup, 'Title', 'Graph');
+        app.ui.tabResults = uitab(app.ui.tabGroup, 'Title', 'Training Results');
+        app.ui.tabGraph = uitab(app.ui.tabGroup, 'Title', 'Training Graphs');
+        app.ui.tabTrainingLog = uitab(app.ui.tabGroup, 'Title', 'Training logs');
 
         testingTabRoot = uigridlayout(app.ui.tabTesting, [2 1]);
         testingTabRoot.ColumnWidth = {'1x'};
@@ -361,6 +364,25 @@ function breastCancerHistopathologyGui(modelMatPath)
         app.ui.graphPanel.Layout.Column = 1;
         try
             app.ui.graphPanel.Scrollable = 'on';
+        catch
+        end
+
+        % Training log tab
+        trainingLogRoot = uigridlayout(app.ui.tabTrainingLog, [1 1]);
+        trainingLogRoot.RowHeight = {'1x'};
+        trainingLogRoot.ColumnWidth = {'1x'};
+        trainingLogRoot.Padding = [8 8 8 8];
+
+        app.ui.trainingLogText = uitextarea(trainingLogRoot, 'Editable', 'off');
+        app.ui.trainingLogText.Layout.Row = 1;
+        app.ui.trainingLogText.Layout.Column = 1;
+        try
+            app.ui.trainingLogText.WordWrap = 'on';
+        catch
+        end
+        try
+            app.ui.trainingLogText.FontName = 'Menlo';
+            app.ui.trainingLogText.FontSize = 12;
         catch
         end
 
@@ -1007,7 +1029,7 @@ function breastCancerHistopathologyGui(modelMatPath)
 
     function imagePaths = listGraphImages()
         imagePaths = strings(0, 1);
-        folder = fullfile(pwd, 'Training_results');
+        folder = fullfile(app.projectRoot, 'Training_Results');
         if ~isfolder(folder)
             return;
         end
@@ -1026,6 +1048,42 @@ function breastCancerHistopathologyGui(modelMatPath)
         end
         files = unique(files, 'stable');
         imagePaths = fullfile(folder, files);
+    end
+
+    %% ======================== TRAINING LOG TAB ========================
+    function refreshTrainingLogTab()
+        if ~isfield(app, 'ui') || ~isfield(app.ui, 'trainingLogText') || isempty(app.ui.trainingLogText)
+            return;
+        end
+        logPath = fullfile(app.projectRoot, 'Training_Results', 'training_log.txt');
+        setTextAreaFromFile(app.ui.trainingLogText, logPath, 'Training log file not found.');
+    end
+
+    function setTextAreaFromFile(target, path, missingMessage)
+        if isempty(target) || ~isvalid(target)
+            return;
+        end
+        if ~isfile(path)
+            target.Value = {missingMessage; char("Path: " + string(path))};
+            return;
+        end
+        try
+            lines = readlines(path, "EmptyLineRule", "preserve");
+        catch
+            try
+                lines = splitlines(string(fileread(path)));
+            catch
+                lines = "Failed to read file: " + string(path);
+            end
+        end
+        if isempty(lines)
+            lines = "";
+        end
+        if isstring(lines)
+            target.Value = cellstr(lines);
+        else
+            target.Value = lines;
+        end
     end
 
     function syncResultsTabFromModel()
