@@ -371,16 +371,6 @@ In this GUI, **confidence** is defined as the predicted class probability of the
 The displayed **Benign** and **Malignant** values are **normalized** to sum to 1, enabling consistent comparison across algorithms.  
 The predicted label follows an **argmax** decision rule (the class with higher probability is selected).
 
-### Log Panel (Traceability)
-
-The **Log** panel records time-stamped actions such as:
-- model bundle loading (e.g., `models.mat`),
-- uploaded image path,
-- per-algorithm predicted label and confidence,
-- and “best algorithm” selection when multiple models are enabled.
-
-This provides an audit trail of the inference process and helps debugging (missing files, invalid paths, or scoring issues).
-
 ### Screenshots
 
 <table>
