@@ -23,7 +23,7 @@ A comprehensive **classical machine learning pipeline** for automated breast can
 - [System Architecture](#-system-architecture)
 - [Feature Engineering](#-feature-engineering)
 - [Dataset](#-dataset)
-- [GUI Application](#-gui-application)
+- [GUI Application](#️-gui-application)
 - [File Structure](#-file-structure)
 - [Dataset Bootstrap Examples](#-dataset-bootstrap-examples)
 - [Results & Performance](#-results--performance)
