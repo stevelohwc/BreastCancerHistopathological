@@ -131,7 +131,7 @@ The script will:
 │ 2. Dataset Preparation              │
 │    ├─ Patient-disjoint split        │
 │    ├─ Balanced sampling             │
-│    ├─ Train: 85% / Test: 15%       │
+│    ├─ Train: 85% / Test: 15%        │
 │    └─ Verify no data leakage        │
 └─────────────────────────────────────┘
                   ↓
