@@ -153,10 +153,10 @@ The script will:
                   ↓
 ┌─────────────────────────────────────┐
 │ 5. Output Generation                │
-│    ├─ Save models.mat                │
-│    ├─ Save results.mat               │
-│    ├─ Generate 13 figures            │
-│    └─ Write training_log.txt         │
+│    ├─ Save models.mat               │
+│    ├─ Save results.mat              │
+│    ├─ Generate 13 figures           │
+│    └─ Write training_log.txt        │
 └─────────────────────────────────────┘
                   ↓
 ┌─────────────────────────────────────┐
@@ -179,50 +179,50 @@ The script will:
 └─────────────────────────────────────────────────────────────┘
                             ↓
 ┌─────────────────────────────────────────────────────────────┐
-│ STEP 2: DATA ACQUISITION                                    │
+│ STEP 2: DATA  Bootstrap & Acquisition                       │
 │ - Load BreakHis dataset (100X magnification)                │
-│ - Patient-disjoint split: 85% train / 15% test             │
+│ - Patient-disjoint split: 85% train / 15% test              │
 │ - Data leakage verification                                 │
 └─────────────────────────────────────────────────────────────┘
                             ↓
 ┌─────────────────────────────────────────────────────────────┐
 │ STEP 3: PREPROCESSING (10 stages)                           │
-│ - Grayscale → Resize → Denoise → CLAHE → Filter            │
-│ - Sharpen → Morphology → Bilateral → Normalize             │
+│ - Grayscale → Resize → Denoise → CLAHE → Filter             │
+│ - Sharpen → Morphology → Bilateral → Normalize              │
 └─────────────────────────────────────────────────────────────┘
                             ↓
 ┌─────────────────────────────────────────────────────────────┐
 │ STEP 4: FEATURE EXTRACTION (2767 features)                  │
-│ - HOG, LBP, GLCM, Gabor (texture)                          │
-│ - Edge, corner, shape (morphology)                         │
-│ - Moments, percentiles, HSV (intensity)                    │
+│ - HOG, LBP, GLCM, Gabor (texture)                           │
+│ - Edge, corner, shape (morphology)                          │
+│ - Moments, percentiles, HSV (intensity)                     │
 └─────────────────────────────────────────────────────────────┘
                             ↓
 ┌─────────────────────────────────────────────────────────────┐
 │ STEP 5: FEATURE SELECTION (6 methods)                       │
-│ - Variance/Correlation filtering → 2084 features           │
-│ - ReliefF, F-Score, RFE, Tree, LASSO, PCA ranking          │
-│ - Grid search: K ∈ {150, 300, 400}                         │
+│ - Variance/Correlation filtering → 2084 features            │
+│ - ReliefF, F-Score, RFE, Tree, LASSO, PCA ranking           │
+│ - Grid search: K ∈ {150, 300, 400}                          │
 └─────────────────────────────────────────────────────────────┘
                             ↓
 ┌─────────────────────────────────────────────────────────────┐
 │ STEP 6: MODEL SELECTION                                     │
-│ - SVM (RBF kernel + LDA preprocessing)                     │
-│ - Random Forest (ensemble of decision trees)               │
-│ - XGBoost (gradient boosting)                              │
+│ - SVM (RBF kernel + LDA preprocessing)                      │
+│ - Random Forest (ensemble of decision trees)                │
+│ - XGBoost (gradient boosting)                               │
 └─────────────────────────────────────────────────────────────┘
                             ↓
 ┌─────────────────────────────────────────────────────────────┐
 │ STEP 7: TRAINING & HYPERPARAMETER TUNING                    │
-│ - 3-fold stratified cross-validation                       │
-│ - Grid search over hyperparameter space                    │
-│ - Final training on full training set                      │
+│ - 3-fold stratified cross-validation                        │
+│ - Grid search over hyperparameter space                     │
+│ - Final training on full training set                       │
 └─────────────────────────────────────────────────────────────┘
                             ↓
 ┌─────────────────────────────────────────────────────────────┐
 │ STEP 8: EVALUATION (held-out test set)                      │
-│ - Confusion matrix analysis (TN/FP/FN/TP)                  │
-│ - Metrics: Acc, Sens, Spec, Prec, F1, AUC                  │
+│ - Confusion matrix analysis (TN/FP/FN/TP)                   │
+│ - Metrics: Acc, Sens, Spec, Prec, F1, AUC                   │
 │ - Statistical tests: McNemar, Bootstrap CI                  │
 └─────────────────────────────────────────────────────────────┘
 ```
